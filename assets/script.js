@@ -1,4 +1,4 @@
-var owmAPI = "788d5638d7c8e354a162d6c9747d1bdf";
+var owmAPI = "2b53fe9e9a97281c32a772fc33b1d0b7";
 var currentCity = "";
 var lastCity = "";
 
@@ -46,7 +46,7 @@ var getCurrentConditions = (event) => {
                 <li>Temperature: ${response.main.temp}&#8457;</li>
                 <li>Humidity: ${response.main.humidity}%</li>
                 <li>Wind Speed: ${response.wind.speed} mph</li>
-                <li id="uvIndex">UV Index:</li>
+            
             </ul>`;
         // Append the results to the DOM
         $('#current-weather').html(currentWeatherHTML);
@@ -63,15 +63,7 @@ var getCurrentConditions = (event) => {
             return response.json();
         })
         .then((response) => {
-            let uvIndex = response.value;
-            $('#uvIndex').html(`UV Index: <span id="uvVal"> ${uvIndex}</span>`);
-            if (uvIndex>=0 && uvIndex<3){
-                $('#uvVal').attr("class", "uv-favorable");
-            } else if (uvIndex>=3 && uvIndex<8){
-                $('#uvVal').attr("class", "uv-moderate");
-            } else if (uvIndex>=8){
-                $('#uvVal').attr("class", "uv-severe");
-            }
+            
         });
     })
 }
