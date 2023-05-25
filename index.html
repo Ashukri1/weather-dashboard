@@ -1,54 +1,52 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/style.css" />  
-
-  </head>
-  <body>
-    <header class="container-fluid">
-      <h1 class="text-center my-3">Weather Dashboard</h1>
-      <form id="city-search-form" class="form-inline justify-content-center">
-        <input type="text" id="city-search-input" class="form-control mb-2 mr-sm-2" placeholder="Enter city name">
-        <button type="submit" class="btn btn-primary mb-2">Search</button>
-      </form>
-    </header>
-    <main class="container my-5">
-      <h2 id="city-name" class="text-center"></h2>
-      <div class="row">
-        <div class="col-md-2 forecast-day">
-          <h3 class="text-center"></h3>
-          <p><img src="" alt="Weather icon"></p>
-          <p><span id="temperature"></span> &#8457;</p>
-        </div>
-        <div class="col-md-2 forecast-day">
-          <h3 class="text-center"></h3>
-          <p><img src="" alt="Weather icon"></p>
-          <p><span id="temperature"></span> &#8457;</p>
-        </div>
-        <div class="col-md-2 forecast-day">
-          <h3 class="text-center"></h3>
-          <p><img src="" alt="Weather icon"></p>
-          <p><span id="temperature"></span> &#8457;</p>
-        </div>
-        <div class="col-md-2 forecast-day">
-          <h3 class="text-center"></h3>
-          <p><img src="" alt="Weather icon"></p>
-          <p><span id="temperature"></span> &#8457;</p>
-        </div>
-        <div class="col-md-2 forecast-day">
-          <h3 class="text-center"></h3>
-          <p><img src="" alt="Weather icon"></p>
-          <p><span id="temperature"></span> &#8457;</p>
-        </div>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Weather Dashboard</h1>
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Enter city or state" required>
+      <button type="submit">Search</button>
+    </form>
+    <div id="weather-container">
+      <div class="weather-card">
+        <h2>Day 1</h2>
+        <p>Temperature: <span id="temp1"></span></p>
+        <p>Wind: <span id="wind1"></span></p>
+        <p>Humidity: <span id="humidity1"></span></p>
       </div>
-    </main>
-    <footer class="container-fluid text-center py-3">
-      <p>&copy;2023 Weather Dashboard</p>
-    </footer>
-    <script src="assets/script.js"></script>
+      <div class="weather-card">
+        <h2>Day 2</h2>
+        <p>Temperature: <span id="temp2"></span></p>
+        <p>Wind: <span id="wind2"></span></p>
+        <p>Humidity: <span id="humidity2"></span></p>
+      </div>
+      <div class="weather-card">
+        <h2>Day 3</h2>
+        <p>Temperature: <span id="temp3"></span></p>
+        <p>Wind: <span id="wind3"></span></p>
+        <p>Humidity: <span id="humidity3"></span></p>
+      </div>
+      <div class="weather-card">
+        <h2>Day 4</h2>
+        <p>Temperature: <span id="temp4"></span></p>
+        <p>Wind: <span id="wind4"></span></p>
+        <p>Humidity: <span id="humidity4"></span></p>
+      </div>
+      <div class="weather-card">
+        <h2>Day 5</h2>
+        <p>Temperature: <span id="temp5"></span></p>
+        <p>Wind: <span id="wind5"></span></p>
+        <p>Humidity: <span id="humidity5"></span></p>
+      </div>
+    </div>
+  </div>
+  <script src="./assets/script.js"></script>
 
-  </body>
+</body>
 </html>

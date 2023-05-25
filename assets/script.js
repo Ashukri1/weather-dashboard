@@ -1,85 +1,67 @@
-const API_KEY = "2b53fe9e9a97281c32a772fc33b1d0b7";
-const searchForm = document.getElementById("city-search-form");
-const searchInput = document.getElementById("city-search-input");
-const cityNameEl = document.getElementById("city-name");
-const searchHistoryList = document.getElementById("search-history-list");
+const apiKey = "2b53fe9e9a97281c32a772fc33b1d0b7";
 
-// Get the weather data for a city
-const getWeatherData = async (city) => {
-  const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=imperial`);
-  const data = await res.json();
-  return data;
-};
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+const weatherContainer = document.getElementById('weather-container');
 
-// Display the 5 day forecast for a city
-const displayForecast = (data) => {
-  cityNameEl.textContent = data.city.name;
-
-  const forecastEls = document.querySelectorAll(".forecast-day");
-  for (let i = 0; i < forecastEls.length; i++) {
-    const forecastEl = forecastEls[i];
-    const date = new Date(data.list[i].dt * 1000).toLocaleDateString();
-    const icon = `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`;
-    const temperature = data.list[i].main.temp;
-
-    forecastEl.querySelector("h3").textContent = date;
-    forecastEl.querySelector("img").src = icon;
-    forecastEl.querySelector("img").alt = data.list[i].weather[0].description;
-    forecastEl.querySelector("#temperature").textContent = temperature;
+searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const location = searchInput.value.trim();
+  if (location !== '') {
+    getWeatherData(location);
+    searchInput.value = '';
   }
+});
 
-  // Save the searched city to local storage
-  localStorage.setItem("city", data.city.name);
-  // Update the search history
-  updateSearchHistory();
-};
-
-// Search for the weather data for a city
-const searchWeather = async (event) => {
-  event.preventDefault();
-  const city = searchInput.value;
-
-  const data = await getWeatherData(city);
-  displayForecast(data);
-};
-
-searchForm.addEventListener("submit", searchWeather);
-
-// Update the search history list
-const updateSearchHistory = () => {
-  // Get the existing search history from local storage
-  const searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
-
-  // Add the current city to the search history
-  const currentCity = localStorage.getItem("city");
-  if (currentCity && !searchHistory.includes(currentCity)) {
-    searchHistory.push(currentCity);
-  }
-
-  // Clear the existing search history list
-  searchHistoryList.innerHTML = "";
-
-  // Add each search history item to the list
-  searchHistory.forEach((city) => {
-    const li = document.createElement("li");
-    li.textContent = city;
-    li.addEventListener("click", () => {
-      searchInput.value = city;
-      searchWeather(new Event("submit"));
+function getWeatherData(location) {
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      const weatherList = data.list.filter(item => item.dt_txt.includes('12:00:00'));
+      displayWeatherData(weatherList);
+      saveToLocalStorage(location, weatherList);
+    })
+    .catch(error => {
+      console.log('Error:', error);
     });
-    searchHistoryList.appendChild(li);
-  });
-
-  // Save the updated search history to local storage
-  localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-};
-
-// Initialize the search history list
-updateSearchHistory();
-
-// Check if there is a city in local storage and search for its weather data
-const city = localStorage.getItem("city");
-if (city) {
-  searchInput.value = city;
-  searchWeather(new Event("submit"));
 }
+
+function displayWeatherData(weatherList) {
+  weatherContainer.innerHTML = '';
+  weatherList.forEach((weather, index) => {
+    const card = document.createElement('div');
+    card.classList.add('weather-card');
+    const date = new Date(weather.dt * 1000);
+    const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+    const temperature = Math.round(weather.main.temp - 273.15);
+    const windSpeed = weather.wind.speed;
+    const humidity = weather.main.humidity;
+    card.innerHTML = `
+      <h2>${day}</h2>
+      <p>Date: ${date.toLocaleDateString()}</p>
+      <p>Temperature: ${temperature}°C</p>
+      <p>Wind Speed: ${windSpeed} m/s</p>
+      <p>Humidity: ${humidity}%</p>
+    `;
+    card.style.animationDelay = `${index * 0.1}s`; // Add animation delay for each card
+    weatherContainer.appendChild(card);
+  });
+}
+
+function saveToLocalStorage(location, weatherList) {
+  const savedData = {
+    location: location,
+    weatherList: weatherList
+  };
+  localStorage.setItem('weatherData', JSON.stringify(savedData));
+}
+
+function loadFromLocalStorage() {
+  const savedData = localStorage.getItem('weatherData');
+  if (savedData) {
+    const { location, weatherList } = JSON.parse(savedData);
+    displayWeatherData(weatherList);
+  }
+}
+
+loadFromLocalStorage();
